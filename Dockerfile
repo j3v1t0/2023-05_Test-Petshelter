@@ -1,11 +1,12 @@
 #mvn --version
 FROM maven:3.6.3-openjdk-17 AS build
-WORKDIR /app
-COPY . /app/
+WORKDIR /home/app
+COPY . /home/app
+RUN mvn -f /home/app/pom.xml clean package -DskipTests
 
 #java --version
 FROM  openjdk:17-alpine
-WORKDIR /app
-COPY --from=build /app/target/*.jar /app/app.jar
+VOLUME /tmp
+COPY --from=build /home/app/target/*.jar app.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","app.jar"]
+ENTRYPOINT ["sh", "-c", "java -jar /app.jar"]
