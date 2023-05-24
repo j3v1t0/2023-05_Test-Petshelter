@@ -61,8 +61,8 @@ public class SecurityConfig {
                         "/api/authentication/sign-up",
                         "/swagger-ui/**",
                         "/v3/**",
-                        "/api/account/updateAccount/**",
-                        "/pet/**").permitAll()
+                        "/api/account/updateAccount/**"
+                ).permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
