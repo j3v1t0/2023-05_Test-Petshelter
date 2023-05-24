@@ -1,5 +1,7 @@
 package com.backend.petshelter.controller;
 
+import com.backend.petshelter.dto.AccountDTO;
+import com.backend.petshelter.dto.AccountSignIn;
 import com.backend.petshelter.model.Account;
 import com.backend.petshelter.service.AccountService;
 import com.backend.petshelter.service.AuthenticationService;
@@ -24,7 +26,7 @@ public class AuthenticationController {
     private AccountService accountService;
 
     @PostMapping("sign-in")
-    public ResponseEntity<?> signIn(@RequestBody Account account){
+    public ResponseEntity<?> signIn(@RequestBody AccountSignIn account){
         return new ResponseEntity<>(authenticationService.signInAndReturnJWT(account), HttpStatus.OK);
     }
 

@@ -56,9 +56,12 @@ public class SecurityConfig {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeHttpRequests()
-                .requestMatchers(HttpMethod.PUT,"/api/account/change/**").hasAnyRole("USER","ADMIN")
-                .requestMatchers("/api/authentication/sign-in", "/api/authentication/sign-up","/swagger-ui/**", "/v3/**").permitAll()
-                .requestMatchers(HttpMethod.PUT,"/api/account/updateAccount/*").hasRole(Role.USER.name())
+                .requestMatchers(HttpMethod.PUT,"/api/account/change/**").hasRole(Role.ADMIN.name())
+                .requestMatchers("/api/authentication/sign-in",
+                        "/api/authentication/sign-up",
+                        "/swagger-ui/**",
+                        "/v3/**",
+                        "/api/account/updateAccount/*").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
