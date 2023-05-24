@@ -5,5 +5,5 @@ import com.backend.petshelter.dto.AccountSignIn;
 import com.backend.petshelter.model.Account;
 
 public interface AuthenticationService {
-    abstract Account signInAndReturnJWT(AccountSignIn signInRequest);
+    AccountSignIn signInAndReturnJWT(Account account);
 }

@@ -1,6 +1,5 @@
 package com.backend.petshelter.service.implementation;
 
-import com.backend.petshelter.dto.AccountDTO;
 import com.backend.petshelter.dto.AccountSignIn;
 import com.backend.petshelter.model.Account;
 import com.backend.petshelter.security.AccountPrincipal;
@@ -21,15 +20,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private JwtProvider jwtProvider;
 
     @Override
-    public Account signInAndReturnJWT(AccountSignIn signInRequest){
+    public AccountSignIn signInAndReturnJWT(Account account){
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(signInRequest.getEmail(), signInRequest.getPassword())
+                new UsernamePasswordAuthenticationToken(account.getEmail(), account.getPassword())
         );
 
         AccountPrincipal authenticationPrincipal = (AccountPrincipal) authentication.getPrincipal();
         String jwt = jwtProvider.generateToken(authenticationPrincipal);
 
-        Account signInUser = authenticationPrincipal.getAccount();
+        AccountSignIn signInUser = authenticationPrincipal.getAccount();
         signInUser.setToken(jwt);
 
         return signInUser;

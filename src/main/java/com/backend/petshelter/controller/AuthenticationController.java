@@ -26,7 +26,7 @@ public class AuthenticationController {
     private AccountService accountService;
 
     @PostMapping("sign-in")
-    public ResponseEntity<?> signIn(@RequestBody AccountSignIn account){
+    public ResponseEntity<?> signIn(@RequestBody Account account){
         return new ResponseEntity<>(authenticationService.signInAndReturnJWT(account), HttpStatus.OK);
     }
 
