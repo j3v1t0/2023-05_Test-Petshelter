@@ -6,7 +6,7 @@ RUN mvn -f /home/app/pom.xml clean package -DskipTests
 
 #java --version
 FROM  openjdk:17
-VOLUME /tmp
+WORKDIR /tmp
 EXPOSE 80
 COPY --from=build /home/app/target/*.jar app.jar
 
