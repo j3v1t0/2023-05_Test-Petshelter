@@ -2,7 +2,7 @@ package com.backend.petshelter.model;
 
 import com.backend.petshelter.util.enums.NivelActividad;
 import com.backend.petshelter.util.enums.Sex;
-import com.backend.petshelter.util.enums.Tamaño;
+import com.backend.petshelter.util.enums.Size;
 import com.backend.petshelter.util.enums.Species;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.Date;
 
 @Entity
 @AllArgsConstructor
@@ -37,7 +36,7 @@ public class Pet implements Serializable {
     private Boolean desparacitado;
     private Boolean vacunado;
     private NivelActividad nivelActividad;
-    private Tamaño tamaño;
+    private Size tamaño;
     private Species especie;
     private Sex sex;
     private Boolean activo = true;
