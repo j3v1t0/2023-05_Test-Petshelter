@@ -59,6 +59,8 @@ public class AccountController {
                 accountDetailsDTO.setIdentification(accountDetails.getIdentification());
                 accountDetailsDTO.setCity(accountDetails.getCity());
                 accountDetailsDTO.setAddress(accountDetails.getAddress());
+                accountDetailsDTO.setSex(accountDetails.getSex());
+                accountDetailsDTO.setDateBirth(accountDetails.getDateBirth());
 
                 List<Phones> phonesList = accountDetails.getPhonesList();
                 if (phonesList != null && !phonesList.isEmpty()) {
