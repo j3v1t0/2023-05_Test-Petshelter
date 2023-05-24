@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @ToString
 @Entity
 @Table(name = "ACCOUNT")
-public class Account {
+public class Account implements Serializable {
     @Id
     @Column(name = "account_uuid")
     private String accountUuid;

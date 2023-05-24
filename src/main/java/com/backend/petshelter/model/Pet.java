@@ -4,10 +4,7 @@ import com.backend.petshelter.util.enums.NivelActividad;
 import com.backend.petshelter.util.enums.Sex;
 import com.backend.petshelter.util.enums.Size;
 import com.backend.petshelter.util.enums.Species;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +16,9 @@ import java.io.Serializable;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter@Setter
+@Getter
+@Setter
+@Table(name = "PET")
 public class Pet implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +35,7 @@ public class Pet implements Serializable {
     private Boolean desparacitado;
     private Boolean vacunado;
     private NivelActividad nivelActividad;
-    private Size tamaño;
+    private Size size;
     private Species especie;
     private Sex sex;
     private Boolean activo = true;
