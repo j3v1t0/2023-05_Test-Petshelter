@@ -20,4 +20,6 @@ public interface AccountService {
 
     @Transactional
     Account updateAccount(AccountDTO accountDTO);
+
+    AccountDTO getCurrentAccount(Account account);
 }

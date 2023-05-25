@@ -45,46 +45,9 @@ public class AccountController {
     public ResponseEntity<?> getCurrentAccount(@AuthenticationPrincipal AccountPrincipal accountPrincipal) {
         try {
             Account account = accountService.findByAccountReturnToken(accountPrincipal.getUsername());
-            if (account != null && account.getAccountDetails() != null) {
-                AccountDTO accountDTO = new AccountDTO();
-                accountDTO.setUuid(account.getAccountUuid());
-                accountDTO.setEmail(account.getEmail());
-                accountDTO.setPassword(account.getPassword());
-                accountDTO.setRol(account.getRol().toString());
+            AccountDTO accountDTO = accountService.getCurrentAccount(account);
+            return new ResponseEntity<>(accountDTO, HttpStatus.OK);
 
-                AccountDetails accountDetails = account.getAccountDetails();
-                AccountDetailsDTO accountDetailsDTO = new AccountDetailsDTO();
-                accountDetailsDTO.setFullName(accountDetails.getFullName());
-                accountDetailsDTO.setIdentificationType(accountDetails.getIdentificationType());
-                accountDetailsDTO.setIdentification(accountDetails.getIdentification());
-                accountDetailsDTO.setCity(accountDetails.getCity());
-                accountDetailsDTO.setAddress(accountDetails.getAddress());
-                accountDetailsDTO.setSex(accountDetails.getSex());
-                accountDetailsDTO.setDateBirth(accountDetails.getDateBirth());
-
-                List<Phones> phonesList = accountDetails.getPhonesList();
-                if (phonesList != null && !phonesList.isEmpty()) {
-                    List<PhonesDTO> phonesDTOList = phonesList.stream()
-                            .map(phones -> {
-                                PhonesDTO phonesDTO = new PhonesDTO();
-                                phonesDTO.setPhoneUuid(phones.getPhoneUuid());
-                                phonesDTO.setPhoneLabel(phones.getPhoneLabel());
-                                phonesDTO.setNumber(phones.getNumber());
-                                phonesDTO.setCityCode(phones.getCityCode());
-                                phonesDTO.setCountryCode(phones.getCountryCode());
-                                return phonesDTO;
-                            })
-                            .collect(Collectors.toList());
-                    accountDetailsDTO.setPhonesList(phonesDTOList);
-                }
-
-                accountDTO.setAccountDetails(accountDetailsDTO);
-                accountDTO.setToken(account.getToken());
-
-                return new ResponseEntity<>(accountDTO, HttpStatus.OK);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account not found");
-            }
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

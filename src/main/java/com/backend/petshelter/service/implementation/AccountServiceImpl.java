@@ -21,7 +21,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -175,6 +174,49 @@ public class AccountServiceImpl implements AccountService {
             return accountRepository.save(existingAccount);
         } catch (Exception e) {
             throw new RuntimeException("Error updating the account" + e.getMessage());
+        }
+    }
+    @Override
+    public AccountDTO getCurrentAccount(Account account){
+        if (account != null && account.getAccountDetails() != null) {
+            AccountDTO accountDTO = new AccountDTO();
+            accountDTO.setUuid(account.getAccountUuid());
+            accountDTO.setEmail(account.getEmail());
+            accountDTO.setPassword(account.getPassword());
+            accountDTO.setRol(account.getRol().toString());
+
+            AccountDetails accountDetails = account.getAccountDetails();
+            AccountDetailsDTO accountDetailsDTO = new AccountDetailsDTO();
+            accountDetailsDTO.setFullName(accountDetails.getFullName());
+            accountDetailsDTO.setIdentificationType(accountDetails.getIdentificationType());
+            accountDetailsDTO.setIdentification(accountDetails.getIdentification());
+            accountDetailsDTO.setCity(accountDetails.getCity());
+            accountDetailsDTO.setAddress(accountDetails.getAddress());
+            accountDetailsDTO.setSex(accountDetails.getSex());
+            accountDetailsDTO.setDateBirth(accountDetails.getDateBirth());
+
+            List<Phones> phonesList = accountDetails.getPhonesList();
+            if (phonesList != null && !phonesList.isEmpty()) {
+                List<PhonesDTO> phonesDTOList = phonesList.stream()
+                        .map(phones -> {
+                            PhonesDTO phonesDTO = new PhonesDTO();
+                            phonesDTO.setPhoneUuid(phones.getPhoneUuid());
+                            phonesDTO.setPhoneLabel(phones.getPhoneLabel());
+                            phonesDTO.setNumber(phones.getNumber());
+                            phonesDTO.setCityCode(phones.getCityCode());
+                            phonesDTO.setCountryCode(phones.getCountryCode());
+                            return phonesDTO;
+                        })
+                        .collect(Collectors.toList());
+                accountDetailsDTO.setPhonesList(phonesDTOList);
+            }
+
+            accountDTO.setAccountDetails(accountDetailsDTO);
+            accountDTO.setToken(account.getToken());
+
+            return accountDTO;
+        } else {
+            throw new IllegalArgumentException("Account not found");
         }
     }
 }
