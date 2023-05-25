@@ -32,12 +32,15 @@ public class Account implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "rol", nullable = false)
     private Role rol;
-    @Column(name = "created_date", nullable = false)
+    @Column(name = "created_date", nullable = false, updatable = false)
     private LocalDateTime createdDate;
     @Column(name = "last_session_date", nullable = false)
     private LocalDateTime LastSessionDate;
     @Column(name = "active")
     private boolean active;
+
+    @Column(name = "verification_code", updatable = false)
+    private String verificationCode;
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
     private AccountDetails accountDetails;
     @Transient
@@ -50,6 +53,6 @@ public class Account implements Serializable {
         this.rol = Role.USER;
         this.createdDate = DatePattern.getCurrentDateTimeFormatted();
         this.LastSessionDate = DatePattern.getCurrentDateTimeFormatted();
-        this.active = true;
+        this.active = false;
     }
 }

@@ -39,6 +39,9 @@ public class AuthenticationController {
             if (account.getPassword() == null || account.getPassword().isEmpty()) {
                 return new ResponseEntity<>("Password can't be empty", HttpStatus.BAD_REQUEST);
             }
+/*            if (account.isActive() == false) {
+                return new ResponseEntity<>("This account is not active", HttpStatus.BAD_REQUEST);
+            }*/
             if (accountService.findByEmail(account.getEmail()).isPresent()) {
                 return new ResponseEntity<>("This account already exists", HttpStatus.CONFLICT);
             }else {

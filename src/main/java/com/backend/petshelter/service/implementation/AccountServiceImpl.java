@@ -215,7 +215,18 @@ public class AccountServiceImpl implements AccountService {
             accountDTO.setToken(account.getToken());
 
             return accountDTO;
-        } else {
+        }
+        if (account != null){
+            AccountDTO accountDTO = new AccountDTO();
+            accountDTO.setUuid(account.getAccountUuid());
+            accountDTO.setEmail(account.getEmail());
+            accountDTO.setPassword(account.getPassword());
+            accountDTO.setRol(account.getRol().toString());
+            accountDTO.setToken(account.getToken());
+
+            return accountDTO;
+        }
+        else {
             throw new IllegalArgumentException("Account not found");
         }
     }

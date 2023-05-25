@@ -27,7 +27,7 @@ public class AccountController {
     private AccountService accountService;
 
     @PutMapping("change/{role}")
-    public ResponseEntity<?> changeRol(@AuthenticationPrincipal AccountPrincipal accountPrincipal, @PathVariable Role role) {
+    public ResponseEntity<?> changeRolCurrentAccount(@AuthenticationPrincipal AccountPrincipal accountPrincipal, @PathVariable Role role) {
         try {
             if (role == null) {
                 throw new IllegalArgumentException("Invalid rol");
