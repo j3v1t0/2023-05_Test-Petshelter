@@ -66,6 +66,7 @@ public class AccountServiceImpl implements AccountService {
 
             AccountDetails accountDetails = new AccountDetails();
             accountDetails.setAccountDetailsuuid(UUID.randomUUID().toString());
+            accountDetails.setAccount(saveAccount);
             accountDetails.setFullName(account.getAccountDetails().getFullName());
             saveAccount.setAccountDetails(accountDetails);
             accountRegistration.setFullName(account.getAccountDetails());
