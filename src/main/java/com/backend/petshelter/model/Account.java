@@ -1,6 +1,6 @@
 package com.backend.petshelter.model;
 
-import com.backend.petshelter.util.dateformat.DatePattern;
+import com.backend.petshelter.util.format.DatePattern;
 import com.backend.petshelter.util.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -11,7 +11,6 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -46,10 +45,11 @@ public class Account implements Serializable {
     @Transient
     private String token;
 
-    public Account(String email, String password) {
+    public Account(String email, String password, String verificationCode) {
         this.accountUuid= UUID.randomUUID().toString();
         this.email = email;
         this.password = password;
+        this.verificationCode = verificationCode;
         this.rol = Role.USER;
         this.createdDate = DatePattern.getCurrentDateTimeFormatted();
         this.LastSessionDate = DatePattern.getCurrentDateTimeFormatted();

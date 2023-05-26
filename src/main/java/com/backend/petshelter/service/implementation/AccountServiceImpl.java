@@ -13,13 +13,21 @@ import com.backend.petshelter.service.AccountService;
 import com.backend.petshelter.util.enums.IdentificationType;
 import com.backend.petshelter.util.enums.PhoneLabel;
 import com.backend.petshelter.util.enums.Role;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
+import org.modelmapper.internal.bytebuddy.utility.RandomString;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -33,6 +41,12 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private JwtProvider jwtProvider;
 
+    @Autowired
+    private JavaMailSender javaMailSender;
+
+    @Value("${spring.mail.username}")
+    private String emailFrom;
+
     @Override
     public AccountRegistration createAccountUserRol(Account account) {
 
@@ -43,17 +57,73 @@ public class AccountServiceImpl implements AccountService {
             accountRegistration.setEmail(email);
             String password = passwordEncoder.encode(account.getPassword());
             accountRegistration.setPassword(passwordEncoder.encode(password));
+            String verificationCode = RandomString.make(64);
+            accountRegistration.setVerificationCode(verificationCode);
 
-            Account saveAccount = new Account(email, password);
+
+            Account saveAccount = new Account(email, password, verificationCode);
+
+            AccountDetails accountDetails = new AccountDetails();
+            accountDetails.setAccountDetailsuuid(UUID.randomUUID().toString());
+            accountDetails.setFullName(account.getAccountDetails().getFullName());
+            saveAccount.setAccountDetails(accountDetails);
+            accountRegistration.setFullName(account.getAccountDetails());
+
             accountRepository.save(saveAccount);
             String jwt = jwtProvider.generateToken(saveAccount);
             accountRegistration.setToken(jwt);
-
+            this.sendVerificationCodeToEmail(saveAccount);
             return accountRegistration;
 
         } catch (Exception e) {
             throw new RuntimeException("Error creating account: " + e.getMessage());
         }
+    }
+    @Override
+    public void sendVerificationCodeToEmail(Account account) throws MessagingException, UnsupportedEncodingException {
+
+
+        String subject = "Please verify your registration";
+        String senderName = "Mascota en Casa Team";
+        String mailContent = "<head>";
+        mailContent += "<style>";
+        mailContent += "a{";
+        mailContent += "display: block;";
+        mailContent += "width: 200px;";
+        mailContent += "font-family: Arial, Helvetica, sans-serif;";
+        mailContent += "font-weight: 700;";
+        mailContent += "color: #FFB344;";
+        mailContent += "background-color: #00A19D;";
+        mailContent += "border-radius: 10px;";
+        mailContent += "padding: 15px 30px;";
+        mailContent += "margin: 20px 20px;";
+        mailContent += "text-align: center;";
+        mailContent += "text-decoration: none;";
+        mailContent += "}";
+        mailContent += "a:hover{";
+        mailContent += "background-color: #FFB344;";
+        mailContent += "border: 2px solid #00A19D;";
+        mailContent += "color: #00A19D;";
+        mailContent += "}";
+        mailContent += "</style>";
+        mailContent += "</head>";
+        mailContent += "<p>Dear " + account.getAccountDetails().getFullName() + ",</p>";
+        mailContent += "<p> Please click the link below to verify to your registration:</p>";
+
+        String verifyURL = "/verify?code=" + account.getVerificationCode();
+        mailContent += "<h3><a href=\"" + verifyURL + "\" target=_blank >Click to verify your account</a></h3>";
+
+        mailContent += "<p> Thank you <br>The Mascota en Casa Team </p>";
+
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom(emailFrom, senderName);
+        helper.setTo(account.getEmail());
+        helper.setSubject(subject);
+        helper.setText(mailContent, true);
+
+        javaMailSender.send(message);
     }
 
     @Override

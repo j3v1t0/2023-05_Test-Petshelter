@@ -1,10 +1,13 @@
 package com.backend.petshelter.controller;
 
 import com.backend.petshelter.dto.AccountDTO;
+import com.backend.petshelter.dto.AccountRegistration;
 import com.backend.petshelter.dto.AccountSignIn;
 import com.backend.petshelter.model.Account;
 import com.backend.petshelter.service.AccountService;
 import com.backend.petshelter.service.AuthenticationService;
+import com.backend.petshelter.util.format.SiteURL;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +30,12 @@ public class AuthenticationController {
 
     @PostMapping("sign-in")
     public ResponseEntity<?> signIn(@RequestBody Account account){
-        return new ResponseEntity<>(authenticationService.signInAndReturnJWT(account), HttpStatus.OK);
+
+        if (account.isActive() == false) {
+            return new ResponseEntity<>("This account is not active", HttpStatus.BAD_REQUEST);
+        }else {
+            return new ResponseEntity<>(authenticationService.signInAndReturnJWT(account), HttpStatus.OK);
+        }
     }
 
     @PostMapping("sign-up")
@@ -39,9 +47,9 @@ public class AuthenticationController {
             if (account.getPassword() == null || account.getPassword().isEmpty()) {
                 return new ResponseEntity<>("Password can't be empty", HttpStatus.BAD_REQUEST);
             }
-/*            if (account.isActive() == false) {
-                return new ResponseEntity<>("This account is not active", HttpStatus.BAD_REQUEST);
-            }*/
+            if (account.getAccountDetails().getFullName() == null || account.getAccountDetails().getFullName().isEmpty()){
+                return new ResponseEntity<>("Fullname can't be empty", HttpStatus.BAD_REQUEST);
+            }
             if (accountService.findByEmail(account.getEmail()).isPresent()) {
                 return new ResponseEntity<>("This account already exists", HttpStatus.CONFLICT);
             }else {

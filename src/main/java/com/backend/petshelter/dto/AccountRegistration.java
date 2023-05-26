@@ -1,5 +1,6 @@
 package com.backend.petshelter.dto;
 
+import com.backend.petshelter.model.AccountDetails;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,5 +13,7 @@ import lombok.Setter;
 public class AccountRegistration {
     private String email;
     private String password;
+    private String verificationCode;
+    private AccountDetails fullName;
     private String token;
 }
