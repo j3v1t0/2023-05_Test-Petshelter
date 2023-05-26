@@ -30,8 +30,8 @@ public class AuthenticationController {
 
     @PostMapping("sign-in")
     public ResponseEntity<?> signIn(@RequestBody Account account){
-
-        if (account.isActive() == false) {
+        AccountSignIn signInAccount = authenticationService.signInAndReturnJWT(account);
+        if (signInAccount.isActive() == false) {
             return new ResponseEntity<>("This account is not active", HttpStatus.BAD_REQUEST);
         }else {
             return new ResponseEntity<>(authenticationService.signInAndReturnJWT(account), HttpStatus.OK);
