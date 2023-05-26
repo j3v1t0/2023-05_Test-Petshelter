@@ -51,7 +51,6 @@ public class AccountController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-
     }
 
     @PutMapping("updateAccount/{email}")
