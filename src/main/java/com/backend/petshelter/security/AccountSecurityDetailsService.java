@@ -25,6 +25,8 @@ public class AccountSecurityDetailsService implements UserDetailsService {
         accountSignIn.setEmail(account.getEmail());
         accountSignIn.setPassword(account.getPassword());
         accountSignIn.setToken(account.getToken());
+        boolean active = account.isActive();
+        accountSignIn.setActive(active);
 
         Set<GrantedAuthority> authorities = Set.of(SecurityUtils.convertToAuthority(account.getRol().name()));
 

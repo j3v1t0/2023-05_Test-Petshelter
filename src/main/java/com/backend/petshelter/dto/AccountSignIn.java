@@ -13,4 +13,5 @@ public class AccountSignIn {
     private String email;
     private String password;
     private String token;
+    private boolean active;
 }

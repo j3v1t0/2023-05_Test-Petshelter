@@ -13,6 +13,7 @@ import com.backend.petshelter.service.AccountService;
 import com.backend.petshelter.util.enums.IdentificationType;
 import com.backend.petshelter.util.enums.PhoneLabel;
 import com.backend.petshelter.util.enums.Role;
+import com.backend.petshelter.util.format.SiteURL;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
@@ -110,7 +111,7 @@ public class AccountServiceImpl implements AccountService {
         mailContent += "<p>Dear " + account.getAccountDetails().getFullName() + ",</p>";
         mailContent += "<p> Please click the link below to verify to your registration:</p>";
 
-        String verifyURL = "/verify?code=" + account.getVerificationCode();
+        String verifyURL =  "/verify?code=" + account.getVerificationCode();
         mailContent += "<h3><a href=\"" + verifyURL + "\" target=_blank >Click to verify your account</a></h3>";
 
         mailContent += "<p> Thank you <br>The Mascota en Casa Team </p>";

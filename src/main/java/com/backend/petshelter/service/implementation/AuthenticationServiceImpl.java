@@ -29,6 +29,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String jwt = jwtProvider.generateToken(authenticationPrincipal);
 
         AccountSignIn signInUser = authenticationPrincipal.getAccount();
+        account.setActive(authenticationPrincipal.getAccount().isActive());
         signInUser.setToken(jwt);
 
         return signInUser;
