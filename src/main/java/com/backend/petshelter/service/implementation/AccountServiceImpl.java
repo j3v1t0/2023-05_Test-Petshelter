@@ -72,7 +72,7 @@ public class AccountServiceImpl implements AccountService {
             saveAccount.setAccountDetails(accountDetails);
             accountRegistration.setFullName(account.getAccountDetails());
 
-            this.sendVerificationCodeToEmail(account);
+            this.sendVerificationCodeToEmail(saveAccount);
             accountRepository.save(saveAccount);
             String jwt = jwtProvider.generateToken(saveAccount);
             accountRegistration.setToken(jwt);
