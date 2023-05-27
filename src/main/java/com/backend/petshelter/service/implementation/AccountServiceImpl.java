@@ -46,6 +46,9 @@ public class AccountServiceImpl implements AccountService {
     @Value("${spring.mail.username}")
     private String emailFrom;
 
+    @Value("${server.servlet.context-path}")
+    private String siteURL;
+
     @Override
     public AccountRegistration createAccountUserRol(Account account) {
 
@@ -110,7 +113,7 @@ public class AccountServiceImpl implements AccountService {
         mailContent += "<p>Dear " + account.getAccountDetails().getFullName() + ",</p>";
         mailContent += "<p> Please click the link below to verify to your registration:</p>";
 
-        String verifyURL =  "/verify?code=" + account.getVerificationCode();
+        String verifyURL =  siteURL + "/" + account.getVerificationCode();
         mailContent += "<h3><a href=\"" + verifyURL + "\" target=_blank >Click to verify your account</a></h3>";
 
         mailContent += "<p> Thank you <br>The Mascota en Casa Team </p>";
