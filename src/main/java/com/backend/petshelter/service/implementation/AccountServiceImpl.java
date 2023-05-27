@@ -46,6 +46,9 @@ public class AccountServiceImpl implements AccountService {
     @Value("${spring.mail.username}")
     private String emailFrom;
 
+    @Value("${verification.base-url}")
+    protected String baseUrl;
+
     @Override
     public AccountRegistration createAccountUserRol(Account account) {
 
@@ -69,6 +72,7 @@ public class AccountServiceImpl implements AccountService {
             saveAccount.setAccountDetails(accountDetails);
             accountRegistration.setFullName(account.getAccountDetails());
 
+            this.sendVerificationCodeToEmail(account);
             accountRepository.save(saveAccount);
             String jwt = jwtProvider.generateToken(saveAccount);
             accountRegistration.setToken(jwt);
@@ -78,8 +82,9 @@ public class AccountServiceImpl implements AccountService {
             throw new RuntimeException("Error creating account: " + e.getMessage());
         }
     }
+
     @Override
-    public void sendVerificationCodeToEmail(Account account, String siteURL) throws MessagingException, UnsupportedEncodingException {
+    public void sendVerificationCodeToEmail(Account account) throws MessagingException, UnsupportedEncodingException {
 
 
         String subject = "Please verify your registration";
@@ -109,7 +114,7 @@ public class AccountServiceImpl implements AccountService {
         mailContent += "<p>Dear " + account.getAccountDetails().getFullName() + ",</p>";
         mailContent += "<p> Please click the link below to verify to your registration:</p>";
 
-        String verifyURL =  siteURL + "/" + account.getVerificationCode();
+        String verifyURL =  baseUrl + "/" + account.getVerificationCode();
         mailContent += "<h3><a href=\"" + verifyURL + "\" target=_blank >Click to verify your account</a></h3>";
 
         mailContent += "<p> Thank you <br>The Mascota en Casa Team </p>";
