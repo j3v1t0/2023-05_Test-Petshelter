@@ -39,7 +39,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("sign-up")
-    public ResponseEntity<?> signUp(@RequestBody Account account) {
+    public ResponseEntity<?> signUp(@RequestBody Account account, HttpServletRequest request) {
         try{
             if (account.getEmail() == null || account.getEmail().isEmpty()) {
                 return new ResponseEntity<>("Email can't be empty", HttpStatus.BAD_REQUEST);
@@ -53,6 +53,8 @@ public class AuthenticationController {
             if (accountService.findByEmail(account.getEmail()).isPresent()) {
                 return new ResponseEntity<>("This account already exists", HttpStatus.CONFLICT);
             }else {
+                String siteUrl = SiteURL.getSiteURL(request);
+                accountService.sendVerificationCodeToEmail(account,siteUrl);
                 return new ResponseEntity<>(accountService.createAccountUserRol(account), HttpStatus.CREATED);
             }
 

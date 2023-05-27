@@ -45,9 +45,6 @@ public class AccountServiceImpl implements AccountService {
 
     @Value("${spring.mail.username}")
     private String emailFrom;
-    @Value("${context.path}")
-    private String siteURL;
-
 
     @Override
     public AccountRegistration createAccountUserRol(Account account) {
@@ -75,7 +72,6 @@ public class AccountServiceImpl implements AccountService {
             accountRepository.save(saveAccount);
             String jwt = jwtProvider.generateToken(saveAccount);
             accountRegistration.setToken(jwt);
-            this.sendVerificationCodeToEmail(saveAccount);
             return accountRegistration;
 
         } catch (Exception e) {
@@ -83,7 +79,7 @@ public class AccountServiceImpl implements AccountService {
         }
     }
     @Override
-    public void sendVerificationCodeToEmail(Account account) throws MessagingException, UnsupportedEncodingException {
+    public void sendVerificationCodeToEmail(Account account, String siteURL) throws MessagingException, UnsupportedEncodingException {
 
 
         String subject = "Please verify your registration";

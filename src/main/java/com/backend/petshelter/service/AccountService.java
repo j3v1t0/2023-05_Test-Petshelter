@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface AccountService {
     AccountRegistration createAccountUserRol(Account account);
 
-    void sendVerificationCodeToEmail(Account account) throws MessagingException, UnsupportedEncodingException;
+    void sendVerificationCodeToEmail(Account account, String siteURL) throws MessagingException, UnsupportedEncodingException;
 
     Optional<Account> findByEmail(String email);
 
