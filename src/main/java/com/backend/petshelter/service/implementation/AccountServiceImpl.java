@@ -46,8 +46,6 @@ public class AccountServiceImpl implements AccountService {
     @Value("${spring.mail.username}")
     private String emailFrom;
 
-    @Value("${server.servlet.context-path}")
-    private String siteURL;
 
     @Override
     public AccountRegistration createAccountUserRol(Account account) {
