@@ -26,4 +26,6 @@ public interface AccountService {
     Account updateAccount(AccountDTO accountDTO);
 
     AccountDTO getCurrentAccount(Account account);
+
+    boolean verifyAccount(String verificationCode);
 }

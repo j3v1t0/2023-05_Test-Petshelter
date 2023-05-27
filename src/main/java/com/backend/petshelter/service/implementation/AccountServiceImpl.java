@@ -13,7 +13,6 @@ import com.backend.petshelter.service.AccountService;
 import com.backend.petshelter.util.enums.IdentificationType;
 import com.backend.petshelter.util.enums.PhoneLabel;
 import com.backend.petshelter.util.enums.Role;
-import com.backend.petshelter.util.format.SiteURL;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
@@ -21,7 +20,6 @@ import org.modelmapper.internal.bytebuddy.utility.RandomString;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -300,6 +298,18 @@ public class AccountServiceImpl implements AccountService {
         }
         else {
             throw new IllegalArgumentException("Account not found");
+        }
+    }
+    @Transactional
+    @Override
+    public boolean verifyAccount(String verificationCode) {
+        Account account = accountRepository.findByVerificationCode(verificationCode);
+
+        if (account == null || account.isActive()) {
+            return false;
+        } else {
+            account.setActive(true);
+            return true;
         }
     }
 }

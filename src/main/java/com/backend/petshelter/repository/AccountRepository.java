@@ -17,5 +17,11 @@ public interface AccountRepository extends JpaRepository<Account, String> {
     Optional<Account> findByAccountUuid(String uuid);
     @Modifying
     @Query("update Account set rol=:rol where email=:email")
-    void updateUserRole(@Param("email") String username, @Param("rol") Role rol);
+    void updateUserRole(@Param("email") String email, @Param("rol") Role rol);
+
+    @Modifying
+    @Query("update Account set active=true where email=:email")
+    void updateActive(@Param("email") String email);
+    @Query("select a from Account a where a.verificationCode=:verificationCode")
+    Account findByVerificationCode(@Param("verificationCode") String verificationCode);
 }
