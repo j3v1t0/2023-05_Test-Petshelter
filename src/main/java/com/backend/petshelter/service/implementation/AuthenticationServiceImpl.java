@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 public class AuthenticationServiceImpl implements AuthenticationService {
     @Autowired
     private AuthenticationManager authenticationManager;
-
     @Autowired
     private JwtProvider jwtProvider;
 
@@ -26,6 +25,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         );
 
         AccountPrincipal authenticationPrincipal = (AccountPrincipal) authentication.getPrincipal();
+
         String jwt = jwtProvider.generateToken(authenticationPrincipal);
 
         AccountSignIn signInUser = authenticationPrincipal.getAccount();

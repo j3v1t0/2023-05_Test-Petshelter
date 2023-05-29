@@ -11,6 +11,7 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -44,7 +45,8 @@ public class Account implements Serializable {
     private AccountDetails accountDetails;
     @Transient
     private String token;
-
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+    private List<WishList> wishList;
     public Account(String email, String password, String verificationCode) {
         this.accountUuid= UUID.randomUUID().toString();
         this.email = email;

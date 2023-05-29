@@ -25,10 +25,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class SecurityConfig {
     @Autowired
     private AccountSecurityDetailsService accountSecurityDetailsService;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
-
 
     @Bean
     public ModelMapper modelMapper(){

@@ -9,9 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountSignIn {
-    private String email;
-    private String password;
-    private String token;
-    private boolean active;
+public class WishListDTO {
+    private String petName;
+    private String fullName;
 }

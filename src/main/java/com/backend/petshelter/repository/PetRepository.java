@@ -8,7 +8,6 @@ import java.util.List;
 
 
 @Repository
-public interface PetRepostory extends JpaRepository<Pet, Long> {
-
+public interface PetRepository extends JpaRepository<Pet, Long> {
     List<Pet> findByActivoTrue();
 }

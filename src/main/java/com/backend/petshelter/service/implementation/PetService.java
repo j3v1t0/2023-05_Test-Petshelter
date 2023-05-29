@@ -3,13 +3,10 @@ package com.backend.petshelter.service.implementation;
 
 import com.backend.petshelter.dto.PetDTO;
 import com.backend.petshelter.model.Pet;
-import com.backend.petshelter.repository.PetRepostory;
+import com.backend.petshelter.repository.PetRepository;
 import com.backend.petshelter.service.IpetService;
 
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeMap;
-import org.modelmapper.config.Configuration;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
@@ -23,7 +20,7 @@ import java.util.List;
 @Validated
 public class PetService implements IpetService {
    @Autowired
-    private PetRepostory petRepostory;
+    private PetRepository petRepostory;
 
    @Autowired
    private ModelMapper modelMapper;

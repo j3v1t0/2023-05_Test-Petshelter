@@ -1,25 +1,16 @@
 package com.backend.petshelter.controller;
 
 import com.backend.petshelter.dto.AccountDTO;
-import com.backend.petshelter.dto.AccountDetailsDTO;
-import com.backend.petshelter.dto.PhonesDTO;
 import com.backend.petshelter.model.Account;
-import com.backend.petshelter.model.AccountDetails;
-import com.backend.petshelter.model.Phones;
 import com.backend.petshelter.security.AccountPrincipal;
 import com.backend.petshelter.service.AccountService;
 import com.backend.petshelter.util.enums.Role;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/account")
@@ -39,7 +30,24 @@ public class AccountController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
+    }
 
+    @GetMapping("/verify/{verificationCode}")
+    public ResponseEntity<?> verifyAccount(@PathVariable String verificationCode) {
+        try {
+            if (verificationCode == null) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Verification Failed");
+            } else {
+                boolean verified = accountService.verifyAccount(verificationCode);
+                if (verified) {
+                    return ResponseEntity.ok("Verification Succeeded");
+                } else {
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Verification Failed");
+                }
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("An error occurred while verify the account" + e.getMessage());
+        }
     }
 
     @GetMapping()
@@ -66,24 +74,6 @@ public class AccountController {
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating the account" + e.getMessage());
-        }
-    }
-
-    @GetMapping("/verify/{verificationCode}")
-    public ResponseEntity<?> verifyAccount(@PathVariable String verificationCode) {
-        try {
-            if (verificationCode == null) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Verification Failed");
-            } else {
-                boolean verified = accountService.verifyAccount(verificationCode);
-                if (verified) {
-                    return ResponseEntity.ok("Verification Succeeded");
-                } else {
-                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Verification Failed");
-                }
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("An error occurred while verify the account" + e.getMessage());
         }
     }
 }

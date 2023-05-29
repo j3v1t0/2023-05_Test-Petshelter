@@ -1,13 +1,9 @@
 package com.backend.petshelter.controller;
 
-import com.backend.petshelter.dto.AccountDTO;
-import com.backend.petshelter.dto.AccountRegistration;
 import com.backend.petshelter.dto.AccountSignIn;
 import com.backend.petshelter.model.Account;
 import com.backend.petshelter.service.AccountService;
 import com.backend.petshelter.service.AuthenticationService;
-import com.backend.petshelter.util.format.SiteURL;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +17,8 @@ import java.text.MessageFormat;
 @RestController
 @RequestMapping("api/authentication")
 public class AuthenticationController {
-
     @Autowired
     private AuthenticationService authenticationService;
-
     @Autowired
     private AccountService accountService;
 

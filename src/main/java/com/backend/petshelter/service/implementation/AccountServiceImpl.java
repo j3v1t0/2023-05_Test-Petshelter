@@ -39,19 +39,15 @@ public class AccountServiceImpl implements AccountService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private JwtProvider jwtProvider;
-
     @Autowired
     private JavaMailSender javaMailSender;
-
     @Value("${spring.mail.username}")
     private String emailFrom;
-
     @Value("${verification.base-url}")
     protected String baseUrl;
 
     @Override
     public AccountRegistration createAccountUserRol(Account account) {
-
         try {
 
             AccountRegistration accountRegistration = new AccountRegistration();
@@ -62,7 +58,6 @@ public class AccountServiceImpl implements AccountService {
             String verificationCode = RandomString.make(64);
             accountRegistration.setVerificationCode(verificationCode);
 
-
             Account saveAccount = new Account(email, password, verificationCode);
 
             AccountDetails accountDetails = new AccountDetails();
@@ -72,12 +67,11 @@ public class AccountServiceImpl implements AccountService {
             saveAccount.setAccountDetails(accountDetails);
             accountRegistration.setFullName(account.getAccountDetails());
 
-            this.sendVerificationCodeToEmail(saveAccount);
             accountRepository.save(saveAccount);
             String jwt = jwtProvider.generateToken(saveAccount);
             accountRegistration.setToken(jwt);
+            this.sendVerificationCodeToEmail(saveAccount);
             return accountRegistration;
-
         } catch (Exception e) {
             throw new RuntimeException("Error creating account: " + e.getMessage());
         }
@@ -85,7 +79,6 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void sendVerificationCodeToEmail(Account account) throws MessagingException, UnsupportedEncodingException {
-
 
         String subject = "Please verify your registration";
         String senderName = "Mascota en Casa Team";
@@ -160,6 +153,19 @@ public class AccountServiceImpl implements AccountService {
             throw new RuntimeException("Error changing role: " + e.getMessage(), e);
         } catch (Exception e) {
             throw new RuntimeException("Error changing role", e);
+        }
+    }
+
+    @Transactional
+    @Override
+    public boolean verifyAccount(String verificationCode) {
+        Account account = accountRepository.findByVerificationCode(verificationCode);
+
+        if (account == null || account.isActive()) {
+            return false;
+        } else {
+            account.setActive(true);
+            return true;
         }
     }
 
@@ -250,6 +256,7 @@ public class AccountServiceImpl implements AccountService {
             throw new RuntimeException("Error updating the account" + e.getMessage());
         }
     }
+
     @Override
     public AccountDTO getCurrentAccount(Account account){
         if (account != null && account.getAccountDetails() != null) {
@@ -302,18 +309,6 @@ public class AccountServiceImpl implements AccountService {
         }
         else {
             throw new IllegalArgumentException("Account not found");
-        }
-    }
-    @Transactional
-    @Override
-    public boolean verifyAccount(String verificationCode) {
-        Account account = accountRepository.findByVerificationCode(verificationCode);
-
-        if (account == null || account.isActive()) {
-            return false;
-        } else {
-            account.setActive(true);
-            return true;
         }
     }
 }
