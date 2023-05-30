@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class WishListServiceImpl implements WishListService {
@@ -42,6 +43,7 @@ public class WishListServiceImpl implements WishListService {
         }
 
         WishList wishList = new WishList();
+        wishList.setUuidWishList(UUID.randomUUID().toString());
         wishList.setAccount(account);
         wishList.setPet(pet);
 
