@@ -43,6 +43,8 @@ public class Account implements Serializable {
     private String verificationCode;
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
     private AccountDetails accountDetails;
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+    private List<WishList> wishList;
     @Transient
     private String token;
 
