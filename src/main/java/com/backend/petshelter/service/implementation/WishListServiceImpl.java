@@ -13,7 +13,10 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -54,5 +57,26 @@ public class WishListServiceImpl implements WishListService {
         wishListDTO.setFullName(accountDetails.getFullName());
 
         return wishListDTO;
+    }
+
+    @Override
+    public List<WishListDTO> getWishListByEmail(String email) {
+        Optional<Account> accountOptional = accountRepository.findByEmail(email);
+        if (accountOptional.isEmpty()) {
+            throw new NotFoundException("Account not found");
+        }
+
+        Account account = accountOptional.get();
+        List<WishList> wishList = wishListRepository.findByAccount(account);
+        List<WishListDTO> wishlistDTOList = new ArrayList<>();
+
+        for (WishList wish : wishList) {
+            WishListDTO wishlistDTO = new WishListDTO();
+            wishlistDTO.setPetName(wish.getPet().getNombre());
+            wishlistDTO.setFullName(wish.getAccount().getAccountDetails().getFullName());
+            wishlistDTOList.add(wishlistDTO);
+        }
+
+        return wishlistDTOList;
     }
 }

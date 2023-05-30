@@ -61,7 +61,8 @@ public class SecurityConfig {
                         "/v3/**",
                         "/api/account/updateAccount/**",
                         "/pet/**",
-                        "/api/account/verify/**"
+                        "/api/account/verify/**",
+                        "/api/wishlist/**"
                 ).permitAll()
                 .anyRequest().authenticated();
 
