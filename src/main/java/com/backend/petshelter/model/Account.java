@@ -45,8 +45,7 @@ public class Account implements Serializable {
     private AccountDetails accountDetails;
     @Transient
     private String token;
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
-    private List<WishList> wishList;
+
     public Account(String email, String password, String verificationCode) {
         this.accountUuid= UUID.randomUUID().toString();
         this.email = email;

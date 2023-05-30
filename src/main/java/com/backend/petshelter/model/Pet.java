@@ -40,10 +40,6 @@ public class Pet implements Serializable {
     private Species especie;
     private Sex sex;
     private Boolean activo = true;
-
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
-    private List<WishList> wishList;
-
     public void borrar(){
         this.activo = false;
     }
